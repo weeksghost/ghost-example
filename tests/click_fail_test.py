@@ -3,32 +3,37 @@
 import unittest
 from selenium import webdriver
 import selenium.webdriver.support.ui as ui
+from time import sleep
+
 
 class TestClickEvent(unittest.TestCase):
 
     def setUp(self):
         self.driver = webdriver.PhantomJS('phantomjs')
+        #self.driver = webdriver.Firefox()
 
     def tearDown(self):
         self.driver.quit()
 
-    def testClick(self):
-        """Simple Google search for python"""
+    def testStackOverflow(self):
+        """This test will go to http://stackoverflow.com/ and click on the Questions nav item"""
 
-        self.driver.get('http://www.google.com')
-        self.assertTrue(u'Google' in self.driver.page_source, 
+        self.driver.get('http://stackoverflow.com/')
+        self.assertTrue(u'Stack' in self.driver.page_source, 
                             'Text or page not found')
 
-        self.assertTrue(self.driver.find_element_by_name("q").is_displayed())
-        xpath = self.driver.find_element_by_xpath("gbqfq")
-        xpath.send_keys("python")
+        #self.assertTrue(self.driver.find_element_by_xpath("//div[@id='hmenus']/div/ul/li/a").is_displayed())
+        #self.driver.find_element_by_xpath("//div[@id='hmenus']/div/ul/li/a").click()
+
+        self.assertTrue(self.driver.find_element_by_css_selector("#nav-questions").is_displayed())
+        self.driver.find_element_by_css_selector("#nav-questions").click()
 
         wait = ui.WebDriverWait(self.driver, 5)
-        wait.until(lambda driver: u'python' in self.driver.page_source,
+        wait.until(lambda driver: u'Questions' in self.driver.page_source,
                                         'Text not in page source')
 
         current_url = self.driver.current_url
-        print("\ncurrent_url is now '%s'" % current_url
+        print "\ncurrent_url is now '%s'" % current_url
 
-if __name__ = '__main__':
+if __name__ == '__main__':
     unittest.main()
